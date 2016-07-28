@@ -1,0 +1,59 @@
+;;;; curses.lisp - interface to curses library
+
+(load-1-foreign "/lib/libncurses.so.5.2")
+
+(def-alien-routine initscr void)
+(def-alien-routine cbreak void)
+(def-alien-routine noecho void)
+(def-alien-routine raw void)
+(def-alien-routine refresh void)
+(def-alien-routine endwin void)
+(def-alien-routine move void (y int) (x int))
+(def-alien-routine ("addch" curses-addch) void (ch char))
+(def-alien-routine ("getch" curses-getch) int)
+
+(defconstant ascii
+  #(#\Null #\Soh #\Stx #\Etx #\Eot #\Enq #\Ack #\Bell #\Backspace #\Tab
+	#\Newline #\Vt #\Page #\Newline #\So #\Si #\Dle #\Dc1 #\Dc2 #\Dc3
+	#\Dc4 #\Nak #\Syn #\Etb #\Can #\Em #\Sub #\Escape #\Fs #\Gs #\Rs
+	#\Us #\Space #\! #\" #\# #\$ #\% #\& #\' #\( #\) #\* #\+ #\, #\- #\.
+	#\/ #\0 #\1 #\2 #\3 #\4 #\5 #\6 #\7 #\8 #\9 #\: #\; #\< #\= #\> #\?
+	#\@ #\A #\B #\C #\D #\E #\F #\G #\H #\I #\J #\K #\L #\M #\N #\O #\P
+	#\Q #\R #\S #\T #\U #\V #\W #\X #\Y #\Z #\[ #\\ #\] #\^ #\_ #\` #\a
+	#\b #\c #\d #\e #\f #\g #\h #\i #\j #\k #\l #\m #\n #\o #\p #\q #\r
+	#\s #\t #\u #\v #\w #\x #\y #\z #\{ #\| #\} #\~ #\Rubout))
+
+;(eval-when (:compile-toplevel)
+;  (set-dispatch-macro-character #\# #\!
+;								#'(lambda (stream char1 char2)
+;									(position (read stream t nil t) ascii))))
+
+(defun addch (c)
+  (curses-addch (position c ascii)))
+
+(defun getch ()
+  (let ((c (curses-getch)))
+	(if (= c -1)
+		-1
+;		(aref ascii c))))
+		(character c))))
+
+(def-alien-routine attrset void (attrs int))
+
+(defconstant A_NORMAL     #x00000000)
+(defconstant A_STANDOUT   #x00010000)
+(defconstant A_UNDERLINE  #x00020000)
+(defconstant A_REVERSE    #x00040000)
+(defconstant A_BLINK      #x00080000)
+(defconstant A_DIM        #x00100000)
+(defconstant A_BOLD       #x00200000)
+(defconstant A_ALTCHARSET #x00400000)
+(defconstant A_INVIS      #x00800000)
+
+(defconstant A_PROTECT    #x01000000)
+(defconstant A_HORIZONTAL #x02000000)
+(defconstant A_LEFT       #x04000000)
+(defconstant A_LOW        #x08000000)
+(defconstant A_RIGHT      #x10000000)
+(defconstant A_TOP        #x20000000)
+(defconstant A_VERTICAL   #x40000000)

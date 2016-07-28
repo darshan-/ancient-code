@@ -1,0 +1,42 @@
+reduce c functions to little more than ioctl calls.  especially print no
+output from c (except perhaps errors.  but even here it's probably better
+to return an error code and let lisp print error.)  do as much processing
+from lisp as possible.  one benefit of this, other than clarity and ease
+of maintenance, is that the user can control operation with flags such as
+
+-q, --quiet, --silent
+    print no output except errors
+-n, --negative
+    time left, so like "playing -5/14 -1:32/3:06 -18:43/51:20"
+
+and probably other ways to control output/operation that simply aren't
+possible with the current split code.
+
+
+make "lcdp + 1:00" work  (shouldn't be hard, i should have a function
+lying around somewhere to make "1:00" look like 60 (or rather like the
+same thing 60 would look like: 1 minute, 0 seconds, 0 frames))
+
+consider having "lcdp +34" and lcdp -27" work just like "lcdp + 34" and
+"lcdp - 27"
+
+
+
+
+
+
+Makefile should have variables for install directory, these get put into
+lisp code because lisp needs the exact location of files for (load)
+function
+
+
+
+
+
+
+
+
+
+if the command line parameter contains a colon, it is taken as users
+intent that paremeter is a time.  the function make-time takes the string
+and attempts to make a time structure

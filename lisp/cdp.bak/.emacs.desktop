@@ -1,0 +1,70 @@
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Tue Sep  4 00:15:47 2001
+;; Emacs version 20.7.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("set_abs" "get_start" "init" "length" "make_lo" "print_status" "'p;" "init" "linux"))
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+
+;; Buffer section:
+(desktop-create-buffer 205
+  "/home/josiah/lisp/cdp/cdp.lisp"
+  "cdp.lisp"
+  'lisp-mode
+  '(nil)
+  1538
+  '(760 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/lisp/cdp/main.c"
+  "main.c"
+  'c-mode
+  '(nil)
+  17569
+  '(17400 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/lisp/cdp/Makefile"
+  "Makefile"
+  'makefile-mode
+  '(nil)
+  87
+  '(50 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/lisp/cdp/linux_cdrom.c"
+  "linux_cdrom.c"
+  'c-mode
+  '(nil)
+  627
+  '(1985 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/lisp/cdp/cdp-actions.lisp"
+  "cdp-actions.lisp"
+  'lisp-mode
+  '(nil)
+  975
+  '(110 nil)
+  nil
+  nil
+  nil)
+

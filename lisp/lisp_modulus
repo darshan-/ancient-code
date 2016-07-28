@@ -1,0 +1,1 @@
+(defun % (x y) (if (< x y) x (if (equal x y) 0 (% (- x y) y))))

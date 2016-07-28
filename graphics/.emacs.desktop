@@ -1,0 +1,70 @@
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Wed Jul  4 13:55:32 2001
+;; Emacs version 20.7.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("2" "rand" "odd" "FIX" "dir" "touche" "xdir" "timer" "timer_on" "animb" "timer_on" "xdir" "sqrt" "binu" "krude" "pid"))
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+
+;; Buffer section:
+(desktop-create-buffer 205
+  nil
+  "*info*"
+  'Info-mode
+  '(nil)
+  1848
+  '(1 nil)
+  t
+  '("/usr/share/info/binutils" "Top")
+  '((case-fold-search . t)))
+
+(desktop-create-buffer 205
+  "/home/josiah/src/graphics/timer.h"
+  "timer.h"
+  'c-mode
+  '(nil)
+  75
+  '(125 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/graphics/timer.c"
+  "timer.c"
+  'c-mode
+  '(nil)
+  798
+  '(931 nil)
+  nil
+  nil
+  '((overwrite-mode)))
+
+(desktop-create-buffer 205
+  "/home/josiah/src/graphics/Makefile"
+  "Makefile"
+  'makefile-mode
+  '(nil)
+  665
+  '(610 nil)
+  nil
+  nil
+  '((overwrite-mode)))
+
+(desktop-create-buffer 205
+  "/home/josiah/src/graphics/main.c"
+  "main.c"
+  'c-mode
+  '(nil)
+  6409
+  '(6680 nil)
+  nil
+  nil
+  nil)
+

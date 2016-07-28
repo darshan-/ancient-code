@@ -1,0 +1,48 @@
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Wed Dec 12 03:20:59 2001
+;; Emacs version 20.7.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("defstruct" "update" "offset" "*cur-line*" "*cur-col*" "let" "control" "clear" "format" "lines" "edit" "nl" "Etx" "main" "dot" "josiah"))
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+
+;; Buffer section:
+(desktop-create-buffer 205
+  "/home/josiah/src/lisp/dinero/Makefile"
+  "Makefile"
+  'makefile-mode
+  '(nil)
+  168
+  '(167 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/lisp/dinero/dinero"
+  "dinero"
+  'sh-mode
+  '(t)
+  11
+  '(84 nil)
+  nil
+  nil
+  '((fill-column . 74)))
+
+(desktop-create-buffer 205
+  "/home/josiah/src/lisp/dinero/dinero.lisp"
+  "dinero.lisp"
+  'lisp-mode
+  '(nil)
+  8515
+  '(9019 nil)
+  nil
+  nil
+  '((overwrite-mode)))
+

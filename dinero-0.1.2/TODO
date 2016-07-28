@@ -1,0 +1,67 @@
+
+
+maybe have a history for comment editing
+
+
+online help
+
+
+show list of all matches for incompletes (and blank) after second tab
+
+
+get rid of C-a for suspend - leave C-z, C-x C-z, and C-x z
+
+
+dates with correct ammount of days per month (with always 29 for feb)
+
+options along these lines:
+    dinero [-p] [-t] [files]
+	-p print account to stdout much like it would appear onscreen - must supply exactly one file name
+	-t print account balance (t for total) - must supply exactly one file name
+
+    you can do "dinero -pt" or "dinero -tp"
+
+
+C-x e (or something like that) - like M-x
+    calls get_long_input()
+int get_long_input()
+    displays "M-x "
+    lets you type in a command
+    returns int based on command name
+	    0 - not a command
+	    1 - revert-buffer
+	    etc..
+    has tab completion
+
+
+easier editing, at least of comment field
+       (can move left and right, and insert characters)
+
+
+future:
+	message_out_get_yes_no() should return -1 for ^G, (don't do anything
+	for ^C).  go over to all the places that use this function and
+	rewrite.
+		killing a buffer should have:
+		"Account modified?  Save first? [Y/n] "
+			 should do nothing for -1
+			 should call save() for 'y'
+			 should just kill for 'n'
+
+
+	tab completion for file names
+
+
+	a way to retrieve killed text?
+
+
+let user edit whole comment field, even if the current screen can't
+hold it all; scroll right if necessary.  UPDATE: not even have a
+'whole' comment field: limetless in length, dynamically allocated
+comment field.  main screen already only displays as much as it can;
+just scroll right while editing as necessary.
+
+
+1st line after any malloc should check for NULL, and at the very least
+abort
+	do xmalloc

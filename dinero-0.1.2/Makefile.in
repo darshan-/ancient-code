@@ -1,0 +1,154 @@
+# This file is part of Dinero
+# Copyright (C) 2001 by Josiah Israel Barber
+
+##############################################################################
+#                                                                            #
+#   This program is free software; you can redistribute it and/or modify     #
+#   it under the terms of the GNU General Public License as published by     #
+#   the Free Software Foundation; either version 2 of the License, or        #
+#   (at your option) any later version.                                      #
+#                                                                            #
+#   This program is distributed in the hope that it will be useful,          #
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of           #
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the            #
+#   GNU General Public License for more details.                             #
+#                                                                            #
+#   You should have received a copy of the GNU General Public License        #
+#   along with this program; if not, write to the Free Software              #
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA#
+#                                                                            #
+#                                                                            #
+#   See file 'COPYING' for complete details.                                 #
+#                                                                            #
+##############################################################################
+
+all: dinero
+
+CURSES_LIB = @CURSES_LIB@
+CC = @CC@
+VER = 0.1.2
+DIST = dinero-$(VER)
+SOURCES = main.c dinero.c io.c account.c session.c
+OBJECTS = main.o dinero.o io.o account.o session.o
+DEBUG-OBJECTS = debug/main.o debug/dinero.o debug/io.o debug/account.o debug/session.o
+HEADERS = dinero.h io.h account.h session.h
+ALL = $(SOURCES) $(HEADERS) Makefile.in configure.in configure README COPYING TODO
+
+
+## regular section ##
+
+dinero: $(OBJECTS)
+	$(CC) $(OBJECTS) -o dinero $(CURSES_LIB)
+	strip dinero
+	@echo "Success!"
+
+main.o: main.c dinero.h
+	$(CC) -c main.c -O -o main.o -Wall
+
+dinero.o: dinero.c dinero.h io.h account.h session.h
+	$(CC) -c dinero.c -O -o dinero.o -Wall
+
+io.o: io.c io.h account.h session.h
+	$(CC) -c io.c -O -o io.o -Wall
+
+account.o: account.c account.h
+	$(CC) -c account.c -O -o account.o -Wall
+
+session.o: session.c session.h
+	$(CC) -c session.c -O -o session.o -Wall
+
+
+.PHONY: clean
+clean: 
+	rm -f *.o dinero dinero.debug config.status config.log config.cache
+	@echo "All Clean!"
+
+## end regular section ##
+
+
+## debug section ##
+
+.PHONY: debug
+debug: debug/dinero.debug
+	gdb debug/dinero.debug
+
+debug/dinero.debug: $(DEBUG-OBJECTS)
+	$(CC) $(DEBUG-OBJECTS) -o debug/dinero.debug $(CURSES_LIB) -Wall
+
+debug/main.o: main.c dinero.h
+	$(CC) -c main.c -o debug/main.o -Wall -g
+
+debug/dinero.o: dinero.c dinero.h io.h account.h session.h
+	$(CC) -c dinero.c -o debug/dinero.o -Wall -g
+
+debug/io.o: io.c io.h account.h session.h
+	$(CC) -c io.c -o debug/io.o -Wall -g
+
+debug/account.o: account.c account.h
+	$(CC) -c account.c -o debug/account.o -Wall -g
+
+debug/session.o: session.c session.h
+	$(CC) -c session.c -o debug/session.o -Wall -g
+
+
+.PHONY: debug-clean
+debug-clean:
+	rm -f debug/*
+
+## end debug section ##
+
+
+## makefile configuration section ##
+
+Makefile: Makefile.in configure                      # make seems to know that everything needs this
+	@./configure
+	@rm -f config.status config.log config.cache
+ 
+configure: configure.in
+	autoconf
+
+## end makefile configuration section ##
+
+
+## distribution section ##
+
+.PHONY: dist
+dist: $(DIST).tar.gz
+
+$(DIST).tar.gz: $(ALL)
+	mkdir $(DIST)/
+	cp $(ALL) $(DIST)/
+	-tar czf $(DIST).tar.gz $(DIST)
+	rm -rf $(DIST)/
+	@if [ -f $(DIST).tar.gz ]; \
+		then \
+			echo "Made $(DIST).tar.gz"; \
+		else \
+			echo "Failed!"; \
+	fi
+
+.PHONY: dist-clean
+dist-clean: 
+	rm -f $(DIST).tar.gz
+
+## end distribution section ##
+
+
+## backup section ##
+
+.PHONY: backup
+backup: backup.tar.gz
+
+backup.tar.gz: $(ALL)
+	tar czf backup.tar.gz $(ALL)
+
+recover:
+	@if [ -f backup.tar.gz ]; \
+		then \
+			tar xzf backup.tar.gz; \
+		else \
+			echo "bakup.tar.gz does not exist!"; \
+	fi
+
+## end backup section ##
+

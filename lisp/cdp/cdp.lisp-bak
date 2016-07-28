@@ -1,0 +1,64 @@
+;;;; cdp.lisp - main entry point
+
+
+(defvar action nil)
+(defvar *args* (cdr *posix-argv*))
+
+(defun timep (str)
+  "returns t iff str is a valid time"
+  (cond ((not (stringp str)) nil)
+	((not (find #\: str)) nil)
+	((and (= (- (length str) (position #\: str)) 3)
+	      (>= (length str) 4)   ; "0:00"
+	      (<= (length str) 5))  ; "99:59"
+	 t)
+	(t nil)))
+
+(defun destring (list)
+  "takes a list of strings;  returns list of symbols;
+   times remain strings in new list."
+  (if (not (listp list))
+      (error "when is a list not a list?"))
+  (let ((new-list nil))
+    (dolist (element list)
+      (if (find #\: element)
+	  (if (timep element)
+	      (push element new-list)
+	      (progn
+		(format t "cdp.lisp: ~S: bad time~%" element)
+		(quit)))
+	  (push (read-from-string element) new-list)))
+    (reverse new-list)))
+
+(setf *args* (destring *args*))
+
+(defparameter *commands*
+  '((p . play-pause)
+    (play . play)
+    (pause . pause)
+    (s . stop)
+    (f . forward)
+    (ff . fforward)
+    (b . backward)
+    (bb . bbackward)
+    (+ . seekf)
+    (- . seekb)
+    (o . tray-open)
+    (c . tray-close)
+    (e . tray-open)			;e for eject
+    (i . info)
+    (l . play-list)
+    (--interactive . run-lisp))
+
+(cond ((setf action (cdr (assoc (car *args*) *commands*))) (pop *args*))
+      ((numberp (car *args*)) (setf action 'play-track))
+      ((stringp (car *args*)) (setf action 'seek-time))
+      ((null *args*) (setf action 'status))
+      (t (format t "cdp.lisp: \"~A\" : unrecognized command~%" (car *args*))
+	 (quit)))
+
+(load "cdp-actions.x86f")
+
+;(when (eq action 'run-lisp)
+  (funcall action)
+  (quit);)

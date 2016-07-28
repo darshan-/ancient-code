@@ -1,0 +1,103 @@
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Tue Jan  8 18:51:19 2002
+;; Emacs version 20.7.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("dump_stack"))
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+
+;; Buffer section:
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/only_answer"
+  "only_answer"
+  'text-mode
+  '(t)
+  1
+  '(nil nil)
+  nil
+  nil
+  '((fill-column . 74)))
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/rules.c"
+  "rules.c"
+  'c-mode
+  '(nil)
+  1
+  '(500 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/rules.plain"
+  "rules.plain"
+  'text-mode
+  '(t)
+  26
+  '(26 nil)
+  nil
+  nil
+  '((fill-column . 74)))
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/rules2.c"
+  "rules2.c"
+  'c-mode
+  '(nil)
+  733
+  '(1 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/Makefile"
+  "Makefile"
+  'makefile-mode
+  '(nil)
+  309
+  '(308 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/sstack.h"
+  "sstack.h"
+  'c-mode
+  '(nil)
+  166
+  '(1 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/sstack.c"
+  "sstack.c"
+  'c-mode
+  '(nil)
+  1272
+  '(1134 nil)
+  nil
+  nil
+  nil)
+
+(desktop-create-buffer 205
+  "/home/josiah/src/cannibals/main.c"
+  "main.c"
+  'c-mode
+  '(nil)
+  488
+  '(797 nil)
+  nil
+  nil
+  nil)
+

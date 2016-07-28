@@ -1,0 +1,4 @@
+#!/bin/sh
+
+sbcl --noinform  --userinit /home/josiah/src/lisp/dinero/dinero.x86f $*
+#sbcl --noinform  --userinit /home/josiah/src/lisp/dinero/dinero.lisp $*

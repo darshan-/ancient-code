@@ -1,0 +1,14 @@
+Begin4
+Title: cdp
+Version: 1.0
+Entered-date: December 04, 2002
+Description: command-line cd player for linux
+Keywords: cd player, command line, CD
+Author: josiah_barber@hotmail.com (Josiah Barber)
+Maintained-by: josiah_barber@hotmail.com (Josiah Barber)
+Primary-site: www.inalienable.net/code/
+Alternate-site:
+Original-site:
+Platforms: linux
+Copying-policy: GPL 2.0
+End

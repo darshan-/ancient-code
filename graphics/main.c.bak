@@ -1,0 +1,261 @@
+// man 2 setitimer
+
+#include <math.h>
+#include <X11/Xlib.h>
+#include <X11/xpm.h>
+
+#include "timer.h"
+
+#define BSIZE 32
+#define BVDISP 28
+#define FIELDWIDTH 10
+#define FIELDHEIGHT 20
+#define MAINW FIELDWIDTH * BSIZE * 2
+#define MAINH FIELDHEIGHT * BVDISP + BSIZE * 4
+
+#define VEL 4.0
+
+#include "balls/red-ball.xpm"
+#include "balls/blue-ball.xpm"
+#include "balls/green-ball.xpm"
+#include "balls/yellow-ball.xpm"
+#include "balls/purple-ball.xpm"
+#define BALLS 5
+
+#include "balls/icon-face.xpm"
+
+
+Display *disp;
+Window win, main_win;
+int board[FIELDHEIGHT][FIELDWIDTH];
+Pixmap ball_pix[BALLS];
+Pixmap ball_mask;
+GC gc;
+
+float animx, animy, xvel, yvel;
+int xdir; // FIXME: get rid of xdir.  just use negative or positive xvel
+int animc, animb;
+
+void animate();
+void potentiate(int* wouldbex, int* wouldbey);
+int touches(int wouldbex, int wouldbey, int dir);
+double pythagorate(double x, double hyp)
+{
+    return sqrt(hyp * hyp - x * x);
+}
+
+
+int main()
+{
+    int screen_num;
+    Pixmap icon;
+    char** ball_data[BALLS] = {
+	red_ball_xpm,
+	blue_ball_xpm,
+	green_ball_xpm,
+	yellow_ball_xpm,
+	purple_ball_xpm};
+    int i;
+
+    XSizeHints *size_hints;
+    XWMHints *wm_hints;
+    XTextProperty windowName, iconName;
+    char *window_name = "krude";
+
+    srand(time(NULL));
+
+    for (i = 0; i < 8  * FIELDWIDTH; i++){
+	    board[i / FIELDWIDTH][i % FIELDWIDTH] = rand() % BALLS;
+    }
+    for (i; i < FIELDHEIGHT * FIELDWIDTH; i++){
+	    board[i / FIELDWIDTH][i % FIELDWIDTH] = -1;
+    }
+
+    disp = XOpenDisplay(NULL);
+    if (disp == NULL){
+	printf("Where is my X?  I need my X!\n");
+	exit(1);
+    }
+
+    screen_num = DefaultScreen(disp);
+
+    main_win = XCreateSimpleWindow(disp, RootWindow(disp, screen_num), 0, 0, MAINW, MAINH, 0, 0, BlackPixel(disp, screen_num));
+    win = XCreateSimpleWindow(disp, main_win, FIELDWIDTH * BSIZE / 2, 0, FIELDWIDTH * BSIZE, (FIELDHEIGHT - 1) * BVDISP + BSIZE, 2, WhitePixel(disp, screen_num), BlackPixel(disp, screen_num));
+
+    for (i = 0; i < BALLS; i++){
+	if(XpmCreatePixmapFromData(disp, win, ball_data[i], &ball_pix[i], &ball_mask, NULL) != XpmSuccess){
+	    printf("oops.\n");
+	    exit(2);
+	}
+    }
+
+    XpmCreatePixmapFromData(disp, win, icon_face_xpm, &icon, NULL, NULL);
+
+    if (!((size_hints = XAllocSizeHints()) && (wm_hints = XAllocWMHints()))){
+	printf("doh!\n");
+	exit(3);
+    }
+
+    size_hints->flags = PSize | PMinSize | PMaxSize;
+    size_hints->min_width = size_hints->max_width = MAINW;
+    size_hints->min_height = size_hints->max_height = MAINH;
+
+    if (XStringListToTextProperty(&window_name, 1, &windowName) == 0){
+	printf("doh!\n");
+	exit(4);
+    }
+
+    wm_hints->initial_state = NormalState;
+    wm_hints->input = True;
+    wm_hints->icon_pixmap = icon;
+    wm_hints->flags = StateHint | IconPixmapHint | InputHint;
+
+
+    XSetWMProperties(disp, main_win, &windowName, NULL, NULL, 0, size_hints, wm_hints, NULL);
+
+    gc = XCreateGC(disp, win, 0, NULL);
+
+    XSetClipMask(disp, gc, ball_mask);
+
+    XSelectInput(disp, win, ExposureMask | SubstructureNotifyMask | KeyPressMask);
+
+    XMapWindow(disp,win);
+    XMapWindow(disp, main_win);
+
+    for(;;){
+	XEvent report;
+	int j;
+
+	XNextEvent(disp, &report);
+	switch (report.type){
+	case Expose:
+	    for (j = 0; j < FIELDHEIGHT; j++){
+		for (i = 0; i < FIELDWIDTH; i++){
+		    if (board[j][i] >= 0){
+			XSetClipOrigin(disp, gc, i * BSIZE, j * BVDISP);
+			XCopyArea(disp, ball_pix[board[j][i]], win, gc, 0, 0, BSIZE, BSIZE, i * BSIZE, j * BVDISP);
+		    }
+		}
+		j++;
+		for (i = 0; i < FIELDWIDTH - 1; i++){
+		    if (board[j][i] >= 0){
+			XSetClipOrigin(disp, gc, BSIZE / 2 + i * BSIZE, j * BVDISP);
+			XCopyArea(disp, ball_pix[board[j][i]], win, gc, 0, 0, BSIZE, BSIZE, BSIZE / 2 + i * BSIZE, j * BVDISP);
+		    }
+		}
+	    }
+
+	    if (animb){
+		XSetClipOrigin(disp, gc, animx, animy);
+		XCopyArea(disp, ball_pix[animc], win, gc, 0, 0, BSIZE, BSIZE, animx, animy);
+	    }
+
+	    break;
+	case KeyPress:
+//	    printf("keyed.\n");
+	    if (animb)
+		continue;
+
+	    animx = (FIELDWIDTH - 1) * BSIZE / 2 + 1;
+	    animy = (FIELDHEIGHT - 1) * BVDISP;
+	    animc = 1;
+	    animb = 1;
+	    xvel = 0.1;
+	    yvel = pythagorate(xvel, VEL);
+	    xdir = -1;
+
+	    start_timer(10, animate);
+
+//	    fire();
+	    break;
+	}
+    }
+}
+
+void animate()
+{
+
+    /* FIXME: create 2 new pixmaps, each big enough for two balls in relative positions for
+       current and previous frame. fill one with black, draw new ball.  fill other with black,
+       draw ball_mask in old and new positions.  copy 1st with mask of second.
+
+       this will get rid of flicker without leaving trail.
+    */
+    
+    int wouldbex, wouldbey;
+    Pixmap buf, bufmask;
+    
+//    printf("%f\n", animy);
+    
+//    XClearArea(disp, win, 0, animy + BSIZE, FIELDWIDTH * BSIZE, FIELDHEIGHT + BSIZE - animy, False);
+    XClearArea(disp, win, animx, animy, BSIZE, BSIZE, False);
+
+    animx += xdir * xvel;
+    animy -= yvel;
+
+    if (animx + BSIZE >= BSIZE * FIELDWIDTH){
+	xdir = -1;
+    }
+
+    if (animx <= 0){
+	xdir = 1;
+    }
+
+    potentiate(&wouldbex, &wouldbey);
+
+    if (touches(wouldbex, wouldbey, xdir)){
+	stop_timer(0);
+	animb = 0;
+
+	board[wouldbey][wouldbex] = animc;
+
+//	XClearArea(disp, win, animx, animy, BSIZE, BSIZE, False);
+
+	
+//	XSetClipMask(disp, gc, None);
+//	XFillRectangle(disp, win, gc, 0, 0, 16, 16);
+//	XSetClipMask(disp, gc, ball_mask);
+
+	
+	if (wouldbey % 2){ /* odd */
+	    XSetClipOrigin(disp, gc, BSIZE / 2 + wouldbex * BSIZE, wouldbey * BVDISP);
+	    XCopyArea(disp, ball_pix[animc], win, gc, 0, 0, BSIZE, BSIZE, BSIZE / 2 + wouldbex * BSIZE, wouldbey * BVDISP);
+	}
+	else{ /* even */
+	    XSetClipOrigin(disp, gc, wouldbex * BSIZE, wouldbey * BVDISP);
+	    XCopyArea(disp, ball_pix[animc], win, gc, 0, 0, BSIZE, BSIZE, wouldbex * BSIZE, wouldbey * BVDISP);
+	}
+
+	XSync(disp, False);
+	return;
+    }
+    
+//    XSetClipMask(disp, gc, None);
+    XSetClipOrigin(disp, gc, animx, animy);
+    XCopyArea(disp, ball_pix[animc], win, gc, 0, 0, BSIZE, BSIZE, animx, animy);
+//    XSetClipMask(disp, gc, ball_mask);
+    XSync(disp, False);
+}
+
+void potentiate(int* wouldbex, int* wouldbey)
+{
+    /* use animx and animy to determine the position in board[][]
+       the moving ball is closest to. */
+
+    *wouldbex = animx / BSIZE;
+    if ((int)animx % BSIZE > BSIZE / 2) (*wouldbex)++;
+    *wouldbey = animy / BVDISP;
+    if ((int)animy % BVDISP > 0) (*wouldbey)++;
+}
+
+int touches(int x, int y, int dir)
+{
+    /* decide if moving ball makes contact with any still balls */
+
+    /* FIXME: write this right */
+
+    if (board[y - 1][x] > 0)
+	return 1;
+
+    return 0;
+}

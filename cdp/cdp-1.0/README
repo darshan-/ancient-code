@@ -1,0 +1,58 @@
+cdp 1.0
+by Josiah Barber <josiah_barber@hotmail.com>
+
+cdp is a console cd player for linux released under the terms and
+conditions of the GNU GPL (see file COPYING for complete details).
+
+
+I wanted to listen to cd's on an experimental system that didn't have X.
+The only console cd players I could find used curses in order to take over
+my screen and act like very poor GUI cd players.  That annoyed me.  So I
+wrote the cd player I was looking for.  It is driven from the command
+line.  Even though I use X most of the time, the only cd player I use is
+cdp because it is way more convenient for me than a GUI cd player, even
+under X.
+
+usage: cdp [options]
+       cdp              print current status
+       cdp i            display info about current cd
+       cdp h            display help message
+       cdp v            display version
+       cdp p            play / pause / unpause
+       cdp s            stop
+       cdp f            skip forward to the next track
+       cdp ff           same, except loop back to track 1 if on last track
+       cdp b            skip backward to the previous track
+       cdp bb           same, except loop around to last track if on first
+       cdp t            go back to start of this track
+       cdp c            close tray
+       cdp e            eject tray
+       cdp 5            play from track 5 to the end of cd
+       cdp 3 3          play track 3 only
+       cdp 2 4          play tracks 2, 3, and 4
+       cdp 4 2          complain about strange command ;)
+       cdp 30:00        play starting 30 minutes into cd
+       cdp 3 1:00       play starting 1 minute into track 3
+       cdp +10          seek forward 10 seconds
+       cdp -10          seek backward 10 seconds
+
+    cdp1 talks to /dev/cdrom1 instead of /dev/cdrom
+
+Yeah, link /dev/cdrom to your cdrom device if you want things to work.
+Alternatively, you could alter the source before compiling to make cdp
+open another device.
+
+
+INSTALATION:
+    make	# make executable.
+
+    # optional installation copies executable to /usr/local/bin
+    # and creates soft link cdp1 for second drive
+    make install	# must be root.
+    #or
+    sudo make install	# must be in /etc/sudoers
+    
+
+I haven't been doing much with maintaining cdp for the last year until
+this minor update to 1.0.  But please still send feedback, just don't
+expact too much.   josiah_barber@hotmail.com

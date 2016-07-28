@@ -1,0 +1,58 @@
+-q for quiet operation
+-h shows usage information
+ 
+clean up error messages, and write them to stderr instead of stdout;
+always write some kind of message before any and all calls to exit().
+
+
+
+okay, if i want to implement "programmed" operation, i'll have to do as
+follows:
+
+cdp l 4 9 7 2 5 34 33 38 1 3
+(l for list)
+
+sees "l", makes sure all following parameters are cool, determines length
+of first track on list, forks, parent exits, child tells driver to play
+that track only, quits is this is the last track on list, else checks
+status to see that drive is playing, sleeps for length of track already
+decided (maybe 1 or 2 seconds less, we'll see how it goes), wakes up,
+determines length of next track, loops while drive status is still "play",
+tells driver to play track, etc.
+
+just "cdp l" will be like just "cdp", except total tracks, total playing
+time will be for the list, not the actual cd
+
+"cdp li" will be like "cdp i", except, again, for list
+
+most other command will have to be rewritten:
+
+cdp f, cdp b go forward, backward through list
+cdp ff, cdp bb, too
+
+cdp s kills daemon process
+
+cdp [track] will do what?
+cdp [time] will do what?
+cdp +/-time will probably seek forward/backward, but only within the same
+track.  also must re-determine how long to sleep for.
+
+
+
+daemon (list-playing) cdp process:
+before sleeping, creates /tmp/cdp.PID and writes it's PID to it.  creates
+the FIFO /tmp/cdp.FIFO.  has a signal handler that catches SIGHUP, reads
+/tmp/cdp.FIFO into char request[], creates /tmp/cdp.confirm, and returns.
+remove /tmp/cdp.PID, /tmp/cdp.FIFO, and /tmp/cdp.confirm before exitting.
+
+
+client: if /tmp/cdp.PID exists, and the contents of that file are a PID
+correspoding to a running process named cdp, and the file /tmp/cdp.FIFO
+exists, open it for writing, and write "stop" or "pause" or "status" or
+"info" or "forward" or "backward" or "+10", etc.  rm /tmp/cdp.confirm if
+it exists, then send the process PID signal SIGHUP, fork; parent remembers
+child's PID and sleeps for 3 seconds; child loops while /tmp/cdp.confirm
+doesn't exist.  when it does, all is cool and child exits.  when parent
+awakes, it looks to see if child is still alive.  if it is, there is a
+problem.  kill child, display message, and exit
+

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+#sbcl --noinform --noprint --userinit /home/josiah/lisp/cdp/cdp.x86f $*
+sbcl --noinform  --userinit /home/josiah/lisp/cdp/cdp.x86f $*

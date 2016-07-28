@@ -1,0 +1,1 @@
+(define % (lambda (x y) (if (< x y) x (if (= x y) 0 (% (- x y) y)))))

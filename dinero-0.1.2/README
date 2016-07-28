@@ -1,0 +1,135 @@
+Welcome to Dinero!
+Dinero is Copyright (C) 2001 by Josiah Israel Barber.
+
+See the file 'COPYING' (that you should have received along with this
+file and the rest of the distribution) for a copy of the GNU General
+Public License , which is the legal document with the terms this
+program is released under.
+
+You can contact me via email at: gnu_fan@yahoo.com.  You can send
+complaints, bug reports, or suggestions.  You can also send praise.
+
+
+OVERVIEW
+
+Dinero is not exactly really organized.  But it is intended to keep
+you organized.  At least in regards to your checking account.  It's
+also good to keep track of your credit card spending.
+
+The left column holds dates, the middle column holds comments, and the
+right column holds the amount of the transaction.
+
+For example, one line might have a date field holding '01/01/01', a
+comment field holding 'check no 1607, donation to the FSF', and a
+money field holding '-50.00'.  Another line might have a date field
+holding '09/27/02', a comment field holding 'WON THE LOTTERY!!!', and
+a money field holding '+250000.00'.  You can leave any of the fields
+blank, and you can leave any number of blank lines between used lines,
+if you like.
+
+Dinero displays the total of all money fields in the lower right hand
+corner; this is the current balance of your account, or what you owe
+on your credit card, or whatever.
+
+It's basically a special purpose spreadsheet program.
+
+
+USING DINERO
+
+here's a quick rundown.  this section will be written for real at some
+point.  you'll notice that these commands are pretty much identical to
+emacs commands.  the behavior is slightly different from the emacs
+equivalent in some cases where i deemed appropriate.
+
+Usage: dinero [files]
+
+
+C-x k - kill buffer (prompts for name)
+
+C-x b - switch to buffer (prompts for name)
+
+C-x C-f - open file (prompts for name)
+
+C-x s - save all - saves all open accounts that already have a file
+name associated with them.
+
+C-x C-s - save - saves current account.  prompts for file name.
+
+C-f, right - move cursor right, wrap around
+
+C-b, left - move cursor left, wrap around
+
+C-p, up - move cursor up
+
+C-n, down - move cursor down
+
+page up - shift view a screenful up
+
+page down - shift vew a screenful down
+
+home - go to line 0
+
+end - go to last line
+
+C-k - kill current line
+
+C-o - insert line at cursor
+
+C-e - empty field under cursor
+
+C-z, C-x C-z, C-a - suspend
+
+C-x C-c - quit dinero
+
+enter - edit field under cursor
+
+notes: 
+       
+       press any key that makes sense in a particular field, and you
+       will be editing that field with that character as the first one
+
+       over date field, press 't' to fill in todays date
+
+       tab helps a little in date field
+
+       the date field editor-parser (wtf?) exhibits fairly
+       intelligent behavior - it's hard to explain but here's a hint:
+
+if you are over the date field and you press '2', you will be thrown
+into the date field editor, which will get the '2' as the first
+character, but there are no months in the 20's (only 12 months) so you
+must mean feb, so you get "02/" (you also get a slash for free because
+another digit doesn't make sense, only a slash can go there anyway).
+now if you press '2' again you see "02/2" you don't get a free 0 this
+time because some days-of-the-month are in the 20's -- but -- if you
+press '\n' now, you get the benefit of the doubt, and you get
+"02/02/XX" with XX filled in as the current year, or last year as
+appropriate (in this case if the current date is between jan 1 and feb
+1, 02/02 hasn't happened yet, so XX is last year) SO... - if you are
+over the date field you can press '2', '2', '\n' to get the date field
+filled in with the most recent feb 2nd, and the cursor will be moved
+over the comment field.  of course, it's more natural to type '2',
+'/', '2', '\n', and this will work, too.  one more hint: you can use
+'/' to resolve ambiguities: if you had typed a '1' instead of the
+first '2' in the previous example, the date field editor wouldn't have
+given you that free 0, 'cause you might mean 01, 10, 11, or 12, but if
+you press '/' after your '1', then you must mean 01 so you get "01/".
+so for jan 2nd you can type '1', '/', '2', '\n'; but this time the '/'
+is not just a allowed but required: if you type '1', '2', '\n' then
+you've got "12/" and the enter doesn't take.  this is all very
+complicated to explain, but the behavior is pretty much what you would
+hope for (i hope ;)
+
+     tab helps you complete buffer names for killing and switching
+
+     file name completion will be added soon
+
+
+
+ON THE NAME
+
+'Dinero' means 'money' in Spanish, and Dinero helps you keep track of
+your money (in English).  It also makes a good recursive name: Dinero
+Is Not Exactly Really Organized.  The source code for dinero, as well
+as the documentation (this file), is not terribly well organized.  But
+Dinero's purpose is kind of organizational, so it's kinda funny, see.

@@ -1,0 +1,23 @@
+ccc mmm b ---
+  one of each cross			OR 2 cannibals cross
+cc mm --- b c m				|  (c mmm --- b cc)
+  missionary goes back			and 1 cannibal comes back
+cc mmm b --- c
+  2 remaining cannibals cross
+mmm --- b ccc
+  1 cannibal returns
+c mmm b --- cc
+  2 missionaries cross
+c m --- b cc mm
+  one of each return
+cc mm b --- c m
+  2 missionaries cross
+cc --- b c mmm
+  1 cannibal returns
+ccc b --- mmm
+  2 cannibals cross
+c --- b cc mmm
+  1 cannibal returns			OR 1 missionary returns
+cc b --- mmm				|  (c m b --- cc mm)
+  2 cannibals cross			and both cross
+--- b ccc mmm

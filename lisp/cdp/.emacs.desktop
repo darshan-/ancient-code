@@ -1,0 +1,26 @@
+;; --------------------------------------------------------------------------
+;; Desktop File for Emacs
+;; --------------------------------------------------------------------------
+;; Created Sun Sep 30 04:10:53 2001
+;; Emacs version 20.7.1
+
+;; Global section:
+(setq desktop-missing-file-warning nil)
+(setq tags-file-name nil)
+(setq tags-table-list nil)
+(setq search-ring '("return" "print" "info" "length" "errno" "promblems" "stringp" "init" "alien" "load" "se" "cumm" "*args)" "options" "action" "play"))
+(setq regexp-search-ring nil)
+(setq register-alist nil)
+
+;; Buffer section:
+(desktop-create-buffer 205
+  "/home/josiah/src/lisp/cdp/the-right-way.lisp"
+  "the-right-way.lisp"
+  'lisp-mode
+  '(nil)
+  3081
+  '(1 nil)
+  nil
+  nil
+  nil)
+
